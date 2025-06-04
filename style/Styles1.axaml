@@ -1,0 +1,86 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Styles.Include Source="avares://Avalonia.Themes.Fluent/FluentTheme.axaml"/>
+	
+  <Design.PreviewWith>
+    <Border Padding="20" Width="400" Background="#1E1E2E">
+      <StackPanel Spacing="10">
+        <Button Classes="primary">Bouton primaire</Button>
+        <Button Classes="secondary">Bouton secondaire</Button>
+        <Button Classes="nav">Bouton navigation</Button>
+        <TextBox Watermark="Rechercher..."/>
+        <ListBox>
+          <ListBoxItem>Élément 1</ListBoxItem>
+          <ListBoxItem>Élément 2</ListBoxItem>
+        </ListBox>
+      </StackPanel>
+    </Border>
+  </Design.PreviewWith>
+
+  <!-- Variables de couleurs -->
+  <Styles.Resources>
+    <Color x:Key="PrimaryBackground">#1E1E2E</Color>
+    <Color x:Key="SecondaryBackground">#2D2B40</Color>
+    <Color x:Key="ElementBackground">#2A293B</Color>
+    <Color x:Key="BorderColor">#3F3D56</Color>
+    <Color x:Key="AccentColor">#7B68EE</Color>
+    <Color x:Key="AccentHoverColor">#9370DB</Color>
+    <Color x:Key="TextPrimary">White</Color>
+    <Color x:Key="TextSecondary">#CCD0FF</Color>
+    <Color x:Key="TextMuted">#8C8CA5</Color>
+    <Color x:Key="HoverBackground">#3A3D5C</Color>
+  </Styles.Resources>
+
+  <!-- Styles pour Window -->
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
+    <Setter Property="TransparencyLevelHint" Value="AcrylicBlur"/>
+    <Setter Property="ExtendClientAreaToDecorationsHint" Value="True"/>
+  </Style>
+
+  <!-- Styles pour TextBlock -->
+  <Style Selector="TextBlock.title">
+    <Setter Property="FontSize" Value="24"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+  </Style>
+
+  <Style Selector="TextBlock.subtitle">
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
+  </Style>
+
+  <!-- Styles pour Button -->
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+    <Setter Property="Padding" Value="15,10"/>
+    <Setter Property="CornerRadius" Value="4"/>
+  </Style>
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentHoverColor}"/>
+  </Style>
+
+  <Style Selector="Button.secondary">
+    <Setter Property="Background" Value="{DynamicResource ElementBackground}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+    <Setter Property="Padding" Value="15,10"/>
+    <Setter Property="CornerRadius" Value="4"/>
+  </Style>
+  <Style Selector="Button.secondary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BorderColor}"/>
+  </Style>
+
+  <Style Selector="Button.nav">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+    <Setter Property="Margin" Value="0,5"/>
+    <Setter Property="Padding" Value="15,10"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="CornerRadius" Value="4"/>
+  </Style>
+  <Style Selector="Button.nav:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+  </Style>
+</Styles>
