@@ -5,36 +5,195 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
         x:Class="Yprotect.Views.MainWindow"
-        Icon="/Assets/lock-icon.ico"
-        Title="YProtect - Gestionnaire de mots de passe"
-        Background="{DynamicResource PrimaryBackgroundColor}"
-        TransparencyLevelHint="AcrylicBlur"
-        ExtendClientAreaToDecorationsHint="True"
-        Width="800" Height="600">
+        x:DataType="vm:MainWindowViewModel"
+        Title="🔐 YPROTECT VAULT"
+        MinWidth="600" MinHeight="500"
+        Width="950" Height="700"
+        Background="#0a0a0f">
 
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="250" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#00d4ff"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#00d4ff"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Background" Value="#ff0080"/>
+        </Style>
+        <Style Selector="Button:disabled">
+            <Setter Property="Background" Value="#666"/>
+            <Setter Property="BorderBrush" Value="#333"/>
+        </Style>
+        <Style Selector="Button.danger">
+            <Setter Property="Background" Value="#ff0080"/>
+        </Style>
+        <Style Selector="Button.success">
+            <Setter Property="Background" Value="#00ff88"/>
+        </Style>
+        <Style Selector="TextBlock.label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#00d4ff"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+        </Style>
+        
+        <!-- Responsive styles -->
+        <Style Selector="Button">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="Button /template/ ContentPresenter">
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+        </Style>
+        
+        <!-- Mobile adjustments -->
+        <Style Selector="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+    </Window.Styles>
 
-		<!-- Sidebar -->
-		<Border Grid.Column="0" Background="{DynamicResource SecondaryBackground}">
-			<StackPanel>
-				<TextBlock Text="YProtect" Classes="title" Margin="20,20,0,10"/>
-				<TextBlock Text="Gestionnaire de mots de passe" Classes="subtitle" Margin="20,0,0,20"/>
-				<Button Classes="nav" Content="Mots de passe" Margin="10,5"/>
-				<Button Classes="nav" Content="Générateur" Margin="10,5"/>
-				<Button Classes="nav" Content="Paramètres" Margin="10,5"/>
-			</StackPanel>
-		</Border>
-
-		<!-- Main Content -->
-		<Grid Grid.Column="1" Margin="20">
-			<TextBlock Text="Bienvenue dans YProtect" Classes="title" Margin="0,0,0,20"/>
-			<Border Classes="card">
-				<TextBlock Text="Ici, vous pouvez gérer vos mots de passe." Classes="subtitle"/>
-			</Border>
-		</Grid>
-	</Grid>
+    <Border Background="#1a1a2e" CornerRadius="20" Margin="10" 
+            BorderBrush="#00d4ff" BorderThickness="1">
+        <Grid Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" MinHeight="200"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Title -->
+            <Border Grid.Row="0" Background="#00d4ff20" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                <StackPanel>
+                    <TextBlock Name="TitleText" Text="◆ YPROTECT PASSWORD VAULT ◆" 
+                               FontSize="20" FontWeight="Black" 
+                               Foreground="#00d4ff"
+                               HorizontalAlignment="Center" 
+                               FontFamily="Consolas"
+                               TextWrapping="Wrap"/>
+                    <TextBlock Text="[ SECURE • ENCRYPTED • PRIVATE ]" 
+                               FontSize="9" 
+                               Foreground="#ff0080"
+                               HorizontalAlignment="Center"
+                               FontFamily="Consolas"
+                               Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Search Bar -->
+            <Border Grid.Row="1" Background="#16213e" 
+                    BorderBrush="#00d4ff" BorderThickness="1" 
+                    CornerRadius="10" Padding="12" Margin="0,0,0,15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="◦ SEARCH:" 
+                               Classes="label" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBox Grid.Column="1" 
+                             Text="{Binding SearchText}"
+                             Watermark="Filter passwords..." 
+                             Background="#1a1a2e" 
+                             Foreground="White"
+                             BorderBrush="#00d4ff" 
+                             BorderThickness="1"
+                             CornerRadius="5"
+                             Padding="10,8"
+                             FontFamily="Consolas"/>
+                </Grid>
+            </Border>
+            
+            <!-- Password List -->
+            <Border Grid.Row="2" Background="#16213e" 
+                    BorderBrush="#00d4ff" BorderThickness="1" 
+                    CornerRadius="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Headers -->
+                    <Border Grid.Row="0" Background="#00d4ff20" 
+                            CornerRadius="10,10,0,0" Padding="15,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" MinWidth="100"/>
+                                <ColumnDefinition Width="*" MinWidth="120"/>
+                                <ColumnDefinition Width="*" MinWidth="80"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="◦ SITE:" Classes="label"/>
+                            <TextBlock Grid.Column="1" Text="◦ USER:" Classes="label"/>
+                            <TextBlock Grid.Column="2" Text="◦ PASS:" Classes="label"/>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- List -->
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <ListBox ItemsSource="{Binding Passwords}" 
+                                 SelectedItem="{Binding SelectedPassword}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="15,12" 
+                                            BorderBrush="#00d4ff30" 
+                                            BorderThickness="0,0,0,1"
+                                            Background="Transparent">
+                                        <Border.Styles>
+                                            <Style Selector="Border:pointerover">
+                                                <Setter Property="Background" Value="#00d4ff10"/>
+                                            </Style>
+                                        </Border.Styles>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" MinWidth="100"/>
+                                                <ColumnDefinition Width="*" MinWidth="120"/>
+                                                <ColumnDefinition Width="*" MinWidth="80"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Site}" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="#ffffff"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Consolas"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Username}" 
+                                                       Foreground="#00d4ff"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Consolas"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding MaskedPassword}" 
+                                                       FontFamily="Consolas"
+                                                       Foreground="#ff0080"
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+            
+            <!-- Actions -->
+            <StackPanel Grid.Row="3" Name="ButtonPanel" Orientation="Horizontal" 
+                        HorizontalAlignment="Center" Margin="0,15,0,0">
+                <Button Content="[ADD]" 
+                        Command="{Binding AddCommand}"
+                        Classes="success"/>
+                <Button Content="[EDIT]" 
+                        Command="{Binding EditCommand}"/>
+                <Button Content="[DELETE]" 
+                        Command="{Binding DeleteCommand}"
+                        Classes="danger"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

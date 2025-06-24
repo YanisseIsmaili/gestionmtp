@@ -1,11 +1,8 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36202.13 d17.14
+VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yprotect", "Yprotect.csproj", "{9EF58919-5A31-8449-2E23-F030B160B4D4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yprotect.Desktop", "..\Yprotect.Desktop\Yprotect.Desktop.csproj", "{18E63CBA-5AAD-8934-511A-079F914FD1C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,15 +14,11 @@ Global
 		{9EF58919-5A31-8449-2E23-F030B160B4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EF58919-5A31-8449-2E23-F030B160B4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EF58919-5A31-8449-2E23-F030B160B4D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18E63CBA-5AAD-8934-511A-079F914FD1C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18E63CBA-5AAD-8934-511A-079F914FD1C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18E63CBA-5AAD-8934-511A-079F914FD1C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18E63CBA-5AAD-8934-511A-079F914FD1C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {584C47D8-7BA6-4AAD-9E16-6B5D68823CC1}
+		SolutionGuid = {E0F73553-33A2-481D-9589-96399451A9F4}
 	EndGlobalSection
 EndGlobal
