@@ -14,7 +14,7 @@ namespace Yprotect.Modeles
     {   /// <summary>
         /// Initializes a new instance of the <see cref="YprotectContext"/> class.
         /// </summary>
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -25,6 +25,7 @@ namespace Yprotect.Modeles
         }
 
         public DbSet<BDUtilisateur> Utilisateurs { get; set; }
+        public DbSet<BDMotDictionnaire> MotsDictionnaire { get; set; }
     }
     
 }
