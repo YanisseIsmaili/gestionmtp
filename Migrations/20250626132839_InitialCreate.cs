@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Yprotect.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,6 +22,21 @@ namespace Yprotect.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MotsDictionnaire", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Passwords",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Site = table.Column<string>(type: "TEXT", nullable: false),
+                    NomUtilisateur = table.Column<string>(type: "TEXT", nullable: false),
+                    MotDePasseChiffre = table.Column<string>(type: "TEXT", nullable: false),
+                    DateCreation = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Passwords", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,6 +62,9 @@ namespace Yprotect.Migrations
         {
             migrationBuilder.DropTable(
                 name: "MotsDictionnaire");
+
+            migrationBuilder.DropTable(
+                name: "Passwords");
 
             migrationBuilder.DropTable(
                 name: "Utilisateurs");

@@ -11,8 +11,8 @@ using Yprotect.Modeles;
 namespace Yprotect.Migrations
 {
     [DbContext(typeof(YprotectContext))]
-    [Migration("20250626121010_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250626132839_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,32 @@ namespace Yprotect.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MotsDictionnaire");
+                });
+
+            modelBuilder.Entity("Yprotect.Model.BDPassword", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MotDePasseChiffre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NomUtilisateur")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Site")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Passwords");
                 });
 
             modelBuilder.Entity("Yprotect.Model.BDUtilisateur", b =>
