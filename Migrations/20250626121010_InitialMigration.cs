@@ -16,7 +16,8 @@ namespace Yprotect.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Mot = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
+                    Mot = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    toto = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

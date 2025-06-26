@@ -11,7 +11,7 @@ using Yprotect.Modeles;
 namespace Yprotect.Migrations
 {
     [DbContext(typeof(YprotectContext))]
-    [Migration("20250626095250_InitialMigration")]
+    [Migration("20250626121010_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -29,6 +29,10 @@ namespace Yprotect.Migrations
                     b.Property<string>("Mot")
                         .IsRequired()
                         .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("toto")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

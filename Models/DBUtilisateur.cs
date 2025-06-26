@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Yprotect.Model
 {
-    internal class BDUtilisateur
+    public class BDUtilisateur
     {
         [Key]
 

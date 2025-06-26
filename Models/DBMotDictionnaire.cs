@@ -8,14 +8,17 @@ using Yprotect.Utils;
 
 namespace Yprotect.Model
 {
-    internal class BDMotDictionnaire
+    public class BDMotDictionnaire
     {
         [Key]
         [Required(ErrorMessage = Messages.General_Validation_IDMotDictionnaire_Required)]
+
         public Guid Id { get; set; }
-        
+
         [Required(ErrorMessage = Messages.General_Validation_MotDictionnaire_Required)]
         [StringLength(50, ErrorMessage = Messages.General_Validation_MotDictionnaire_StringLength)]
         public string Mot { get; set; } = string.Empty;
+        
+        public string toto { get; set; } = string.Empty;
     }
 }

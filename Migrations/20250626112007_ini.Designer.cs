@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yprotect.Modeles;
 
@@ -10,9 +11,11 @@ using Yprotect.Modeles;
 namespace Yprotect.Migrations
 {
     [DbContext(typeof(YprotectContext))]
-    partial class YprotectContextModelSnapshot : ModelSnapshot
+    [Migration("20250626112007_ini")]
+    partial class ini
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
@@ -35,32 +38,6 @@ namespace Yprotect.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MotsDictionnaire");
-                });
-
-            modelBuilder.Entity("Yprotect.Model.BDPassword", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreation")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("MotDePasseChiffre")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NomUtilisateur")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Site")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Passwords");
                 });
 
             modelBuilder.Entity("Yprotect.Model.BDUtilisateur", b =>

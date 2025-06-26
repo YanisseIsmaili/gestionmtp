@@ -7,6 +7,7 @@ using SQLitePCL;
 using Yprotect.Modeles;
 using Yprotect.Utils;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Yprotect;
 
@@ -40,21 +41,18 @@ public partial class App : Application
             // Initialize the SQLite database connection
             Logger.Database("Création de la base de données...");
             
-            YprotectContext olocalDatabase = new YprotectContext();
-            bool created = olocalDatabase.Database.EnsureCreated();
-            
-            if (created)
+            using (YprotectContext olocalDatabase = new YprotectContext())
             {
-                Logger.Success("Base de données créée avec succès");
-            }
-            else
-            {
-                Logger.Info("Base de données existante trouvée");
+                // Exécuter les migrations automatiquement
+                Logger.Database("Application des migrations...");
+                olocalDatabase.Database.Migrate();
+
+                AdminSeeder.SeedSuperAdmin(olocalDatabase);
+                
+                Logger.Success("Base de données et migrations appliquées avec succès");
+                Logger.Database($"Base dans: {AppDomain.CurrentDomain.BaseDirectory}");
             }
             
-            Logger.Database($"Base dans: {AppDomain.CurrentDomain.BaseDirectory}");
-            
-            olocalDatabase.Dispose();
             Logger.Info("Application démarrée avec succès");
         }
         catch (Exception ex)

@@ -10,7 +10,7 @@ using Yprotect.Modeles;
 
 namespace Yprotect.Modeles
 {
-    class YprotectContext : DbContext
+    public class YprotectContext : DbContext
     {   /// <summary>
         /// Initializes a new instance of the <see cref="YprotectContext"/> class.
         /// </summary>
@@ -26,6 +26,8 @@ namespace Yprotect.Modeles
 
         public DbSet<BDUtilisateur> Utilisateurs { get; set; }
         public DbSet<BDMotDictionnaire> MotsDictionnaire { get; set; }
+        public DbSet<BDPassword> Passwords { get; set; }
+
+
     }
-    
 }
