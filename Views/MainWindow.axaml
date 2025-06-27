@@ -193,6 +193,11 @@
                 <Button Content="[DELETE]" 
                         Command="{Binding DeleteCommand}"
                         Classes="danger"/>
+                <Button Content="Import CSV" 
+                        Command="{Binding ImportCsvCommand}" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top" 
+                        Margin="10"/>
             </StackPanel>
         </Grid>
     </Border>

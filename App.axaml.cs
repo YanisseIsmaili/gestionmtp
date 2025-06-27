@@ -13,52 +13,49 @@ namespace Yprotect;
 
 public partial class App : Application
 {
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
+   public override void Initialize()
+   {
+       AvaloniaXamlLoader.Load(this);
+   }
 
-    public override void OnFrameworkInitializationCompleted()
-    {
-        Logger.Info("Démarrage de l'application Yprotect");
-        
-        try
-        {
-            Batteries.Init();
-            Logger.Success("SQLite initialisé");
-            
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel()
-                };
-                Logger.Info("Fenêtre principale créée");
-            }
+   public override void OnFrameworkInitializationCompleted()
+   {
+       Logger.Info("Démarrage de l'application Yprotect");
+       
+       try
+       {
+           Batteries.Init();
+           Logger.Success("SQLite initialisé");
+           
+           if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+           {
+               desktop.MainWindow = new LoginWindow();
+               Logger.Info("Fenêtre principale créée");
+           }
 
-            base.OnFrameworkInitializationCompleted();
+           base.OnFrameworkInitializationCompleted();
 
-            // Initialize the SQLite database connection
-            Logger.Database("Création de la base de données...");
-            
-            using (YprotectContext olocalDatabase = new YprotectContext())
-            {
-                // Exécuter les migrations automatiquement
-                Logger.Database("Application des migrations...");
-                olocalDatabase.Database.Migrate();
+           // Initialize the SQLite database connection
+           Logger.Database("Création de la base de données...");
+           
+           using (YprotectContext olocalDatabase = new YprotectContext())
+           {
+               // Exécuter les migrations automatiquement
+               Logger.Database("Application des migrations...");
+               olocalDatabase.Database.Migrate();
 
-                AdminSeeder.SeedSuperAdmin(olocalDatabase);
-                
-                Logger.Success("Base de données et migrations appliquées avec succès");
-                Logger.Database($"Base dans: {AppDomain.CurrentDomain.BaseDirectory}");
-            }
-            
-            Logger.Info("Application démarrée avec succès");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("Erreur critique au démarrage", ex);
-            throw;
-        }
-    }
+               AdminSeeder.SeedSuperAdmin(olocalDatabase);
+               
+               Logger.Success("Base de données et migrations appliquées avec succès");
+               Logger.Database($"Base dans: {AppDomain.CurrentDomain.BaseDirectory}");
+           }
+           
+           Logger.Info("Application démarrée avec succès");
+       }
+       catch (Exception ex)
+       {
+           Logger.Error("Erreur critique au démarrage", ex);
+           throw;
+       }
+   }
 }

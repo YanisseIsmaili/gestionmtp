@@ -1,0 +1,93 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+        x:Class="Yprotect.Views.LoginWindow"
+        Title="Yprotect - Connexion"
+        Width="400" Height="500"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False">
+  
+  <Border Background="#1a1a2e" Padding="40">
+    <StackPanel Spacing="20">
+      
+      <!-- Logo/Title -->
+      <TextBlock Text="🔐 YPROTECT" 
+                 FontSize="28" 
+                 FontWeight="Bold" 
+                 HorizontalAlignment="Center"
+                 Foreground="#00ffff" 
+                 Margin="0,0,0,20"/>
+      
+      <!-- Email -->
+      <StackPanel Spacing="8">
+        <TextBlock Text="EMAIL :" FontWeight="SemiBold" Foreground="#00ffff" HorizontalAlignment="Center"/>
+        <TextBox x:Name="EmailTextBox"
+                 Watermark="id"
+                 Padding="12"
+                 FontSize="14"
+                 Background="#0f0f23"
+                 Foreground="#00ffff"
+                 BorderBrush="#00ffff"
+                 BorderThickness="2"
+                 TextAlignment="Center"/>
+      </StackPanel>
+      
+      <!-- Password -->
+      <StackPanel Spacing="8">
+        <TextBlock Text="PASSWORD :" FontWeight="SemiBold" Foreground="#00ffff" HorizontalAlignment="Center"/>
+        <TextBox x:Name="PasswordTextBox"
+                 PasswordChar="●"
+                 Watermark="Enter password"
+                 Padding="12"
+                 FontSize="14"
+                 Background="#0f0f23"
+                 Foreground="#00ffff"
+                 BorderBrush="#00ffff"
+                 BorderThickness="2"
+                 TextAlignment="Center"/>
+      </StackPanel>
+      
+      <!-- Error Message -->
+      <TextBlock x:Name="ErrorTextBlock"
+                 Text=""
+                 Foreground="#ff00ff"
+                 FontSize="12"
+                 HorizontalAlignment="Center"
+                 IsVisible="False"/>
+      
+      <!-- Login Button -->
+      <Button x:Name="LoginButton"
+              Content=" LOGIN "
+              Click="LoginButton_Click"
+              Background="#00ff00"
+              Foreground="#000000"
+              FontSize="16"
+              FontWeight="Bold"
+              Padding="0,12"
+              Margin="0,10,0,0"
+              BorderBrush="#00ff00"
+              BorderThickness="2"
+              HorizontalAlignment="Stretch"
+              HorizontalContentAlignment="Center"/>
+      
+      <!-- Divider -->
+      <Border Height="2" Background="#00ffff" Margin="0,20"/>
+      
+      <!-- Info -->
+      <StackPanel Spacing="5">
+        <TextBlock Text="° Conecte toi :" 
+                   FontSize="12" 
+                   Foreground="#00ffff"
+                   HorizontalAlignment="Center"/>
+        <TextBlock Text="Identifient" 
+                   FontSize="12" 
+                   FontWeight="SemiBold"
+                   Foreground="#ff00ff"
+                   HorizontalAlignment="Center"/>
+      </StackPanel>
+      
+    </StackPanel>
+  </Border>
+</Window>
