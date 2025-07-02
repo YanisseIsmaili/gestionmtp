@@ -17,7 +17,7 @@ Si manquant : [Télécharger .NET 8](https://dotnet.microsoft.com/download)
 
 ### 2. Cloner le projet
 ```bash
-git clone [URL_DU_REPO]
+git clone [https://github.com/YanisseIsmaili/gestionmtp.git]
 cd gestionmtp
 ```
 
