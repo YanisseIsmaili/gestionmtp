@@ -198,6 +198,8 @@
                         HorizontalAlignment="Right" 
                         VerticalAlignment="Top" 
                         Margin="10"/>
+                <Button Content="Settings" 
+                        Command="{Binding SettingsCommand}" />
             </StackPanel>
         </Grid>
     </Border>

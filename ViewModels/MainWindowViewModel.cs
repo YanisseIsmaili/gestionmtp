@@ -7,6 +7,8 @@ using Yprotect.Models;
 using Yprotect.Services;
 using Yprotect.Views;
 using Yprotect.Utils;
+using Yprotect.Model;
+using Yprotect.Modeles;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -15,15 +17,14 @@ namespace Yprotect.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly DataService _dataService;
         private ObservableCollection<PasswordEntry> _passwords;
         private ObservableCollection<PasswordEntry> _filteredPasswords;
         private PasswordEntry? _selectedPassword;
         private string _searchText = "";
+        private string _themeButtonText = "🖥️ System";
 
         public MainWindowViewModel()
         {
-            _dataService = new DataService();
             _passwords = new ObservableCollection<PasswordEntry>();
             _filteredPasswords = new ObservableCollection<PasswordEntry>();
             
@@ -33,15 +34,14 @@ namespace Yprotect.ViewModels
             EditCommand = new RelayCommand(Edit, () => SelectedPassword != null);
             DeleteCommand = new RelayCommand(Delete, () => SelectedPassword != null);
             ImportCsvCommand = new RelayCommand(ImportCsv);
+            CycleThemeCommand = new RelayCommand(CycleTheme);
+            SettingsCommand = new RelayCommand(OpenSettings);
             
             UpdateFilteredPasswords();
             _passwords.CollectionChanged += (s, e) => SavePasswords();
         }
 
-        public ObservableCollection<PasswordEntry> Passwords
-        {
-            get => _filteredPasswords;
-        }
+        public ObservableCollection<PasswordEntry> Passwords => _filteredPasswords;
 
         public string SearchText
         {
@@ -64,26 +64,73 @@ namespace Yprotect.ViewModels
             }
         }
 
+        public string ThemeButtonText
+        {
+            get => _themeButtonText;
+            set => SetProperty(ref _themeButtonText, value);
+        }
+
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ImportCsvCommand { get; }
+        public ICommand CycleThemeCommand { get; }
+        public ICommand SettingsCommand { get; }
 
         private void LoadPasswords()
         {
-            var loadedPasswords = _dataService.LoadPasswords();
-            _passwords.Clear();
-            
-            foreach (var password in loadedPasswords)
+            try
             {
-                password.PropertyChanged += (s, e) => SavePasswords();
-                _passwords.Add(password);
+                using var context = new YprotectContext();
+                var dbPasswords = context.Passwords.ToList();
+                
+                _passwords.Clear();
+                
+                foreach (var dbPassword in dbPasswords)
+                {
+                    var entry = new PasswordEntry
+                    {
+                        Site = dbPassword.Site,
+                        Username = dbPassword.NomUtilisateur,
+                        Password = dbPassword.MotDePasseChiffre
+                    };
+                    
+                    entry.PropertyChanged += (s, e) => SavePasswords();
+                    _passwords.Add(entry);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Erreur lors du chargement des mots de passe", ex);
             }
         }
 
         private void SavePasswords()
         {
-            _dataService.SavePasswords(_passwords);
+            try
+            {
+                using var context = new YprotectContext();
+                
+                context.Passwords.RemoveRange(context.Passwords);
+                
+                foreach (var password in _passwords)
+                {
+                    context.Passwords.Add(new BDPassword
+                    {
+                        Id = Guid.NewGuid(),
+                        Site = password.Site,
+                        NomUtilisateur = password.Username,
+                        MotDePasseChiffre = password.Password,
+                        DateCreation = DateTime.Now
+                    });
+                }
+                
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Erreur lors de la sauvegarde des mots de passe", ex);
+            }
         }
 
         private void UpdateFilteredPasswords()
@@ -97,27 +144,19 @@ namespace Yprotect.ViewModels
             for (int i = 0; i < filtered.Count; i++)
             {
                 if (i >= _filteredPasswords.Count)
-                {
                     _filteredPasswords.Add(filtered[i]);
-                }
                 else if (_filteredPasswords[i] != filtered[i])
-                {
                     _filteredPasswords[i] = filtered[i];
-                }
             }
 
             while (_filteredPasswords.Count > filtered.Count)
-            {
                 _filteredPasswords.RemoveAt(_filteredPasswords.Count - 1);
-            }
         }
 
         private async void Add()
         {
             var dialog = new EditPasswordDialog();
-            var mainWindow = GetMainWindow();
-            
-            if (await dialog.ShowDialog<bool>(mainWindow))
+            if (await dialog.ShowDialog<bool>(GetMainWindow()))
             {
                 dialog.PasswordEntry.PropertyChanged += (s, e) => SavePasswords();
                 _passwords.Add(dialog.PasswordEntry);
@@ -131,9 +170,7 @@ namespace Yprotect.ViewModels
             if (SelectedPassword != null)
             {
                 var dialog = new EditPasswordDialog(SelectedPassword);
-                var mainWindow = GetMainWindow();
-                
-                if (await dialog.ShowDialog<bool>(mainWindow))
+                if (await dialog.ShowDialog<bool>(GetMainWindow()))
                 {
                     UpdateFilteredPasswords();
                 }
@@ -153,7 +190,7 @@ namespace Yprotect.ViewModels
             };
 
             var result = await dialog.ShowAsync(GetMainWindow());
-            if (result != null && result.Length > 0)
+            if (result?.Length > 0)
             {
                 var imported = CsvImporter.ImportFromCsv(result[0]);
                 foreach (var entry in imported)
@@ -166,13 +203,16 @@ namespace Yprotect.ViewModels
             }
         }
 
-        private Window GetMainWindow()
+        private void CycleTheme()
         {
-            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                return desktop.MainWindow ?? throw new InvalidOperationException("MainWindow not found");
-            }
-            throw new InvalidOperationException("Application lifetime not found");
+            ThemeService.CycleTheme();
+            ThemeButtonText = ThemeService.GetCurrentThemeName();
+        }
+
+        private void OpenSettings()
+        {
+            var settingsWindow = new SettingsWindow();
+            settingsWindow.ShowDialog(GetMainWindow());
         }
 
         private void Delete()
@@ -183,6 +223,13 @@ namespace Yprotect.ViewModels
                 SelectedPassword = null;
                 UpdateFilteredPasswords();
             }
+        }
+
+        private Window GetMainWindow()
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                return desktop.MainWindow ?? throw new InvalidOperationException("MainWindow not found");
+            throw new InvalidOperationException("Application lifetime not found");
         }
     }
 }

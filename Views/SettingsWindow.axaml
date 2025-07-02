@@ -1,0 +1,108 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+        x:Class="Yprotect.Views.SettingsWindow"
+        Title="Yprotect - Paramètres"
+        Width="600" Height="500"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+  
+  <Border Background="#1a1a2e" Padding="30">
+    <StackPanel Spacing="25">
+      
+      <!-- Title -->
+      <TextBlock Text="⚙️ PARAMÈTRES" 
+                 FontSize="24" 
+                 FontWeight="Bold" 
+                 HorizontalAlignment="Center"
+                 Foreground="#00ffff" 
+                 Margin="0,0,0,10"/>
+      
+      <!-- Dictionary Section -->
+      <Border BorderBrush="#00ffff" BorderThickness="2" Padding="20" CornerRadius="5">
+        <StackPanel Spacing="15">
+          <TextBlock Text="◆ DICTIONNAIRE DE MOTS" 
+                     FontSize="16" 
+                     FontWeight="Bold"
+                     Foreground="#00ffff"/>
+          
+          <TextBlock Text="Importer un fichier texte (.txt) ou CSV (.csv) contenant des mots" 
+                     FontSize="12" 
+                     Foreground="#aaaaaa"
+                     TextWrapping="Wrap"/>
+          
+          <Button x:Name="ImportDictionaryButton"
+                  Content="[ IMPORTER DICTIONNAIRE ]"
+                  Click="ImportDictionaryButton_Click"
+                  Background="#00ff00"
+                  Foreground="#000000"
+                  FontSize="14"
+                  FontWeight="Bold"
+                  Padding="15,10"
+                  BorderBrush="#00ff00"
+                  BorderThickness="2"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Center"/>
+          
+          <TextBlock x:Name="DictionaryStatusText"
+                     Text=""
+                     FontSize="11"
+                     Foreground="#ff00ff"
+                     HorizontalAlignment="Center"
+                     IsVisible="False"/>
+        </StackPanel>
+      </Border>
+      
+      <!-- Database Section -->
+      <Border BorderBrush="#00ffff" BorderThickness="2" Padding="20" CornerRadius="5">
+        <StackPanel Spacing="15">
+          <TextBlock Text="◆ BASE DE DONNÉES" 
+                     FontSize="16" 
+                     FontWeight="Bold"
+                     Foreground="#00ffff"/>
+          
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="Mots en base :" 
+                       FontSize="12" 
+                       Foreground="#aaaaaa"
+                       VerticalAlignment="Center"/>
+            <TextBlock x:Name="WordCountText"
+                       Text="0"
+                       FontSize="12"
+                       FontWeight="Bold"
+                       Foreground="#00ff00"/>
+          </StackPanel>
+          
+          <Button x:Name="ClearDictionaryButton"
+                  Content="[ VIDER DICTIONNAIRE ]"
+                  Click="ClearDictionaryButton_Click"
+                  Background="#ff0000"
+                  Foreground="#ffffff"
+                  FontSize="12"
+                  FontWeight="Bold"
+                  Padding="10,8"
+                  BorderBrush="#ff0000"
+                  BorderThickness="2"
+                  HorizontalAlignment="Left"/>
+        </StackPanel>
+      </Border>
+      
+      <!-- Close Button -->
+      <Button x:Name="CloseButton"
+              Content="[ FERMER ]"
+              Click="CloseButton_Click"
+              Background="#666666"
+              Foreground="#ffffff"
+              FontSize="14"
+              FontWeight="Bold"
+              Padding="20,10"
+              Margin="0,20,0,0"
+              BorderBrush="#666666"
+              BorderThickness="2"
+              HorizontalAlignment="Center"/>
+      
+    </StackPanel>
+  </Border>
+</Window>
