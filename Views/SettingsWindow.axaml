@@ -1,108 +1,113 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
         x:Class="Yprotect.Views.SettingsWindow"
         Title="Yprotect - Paramètres"
         Width="600" Height="500"
+        MinWidth="400" MinHeight="350"
         WindowStartupLocation="CenterOwner"
-        CanResize="False">
+        CanResize="True">
   
-  <Border Background="#1a1a2e" Padding="30">
-    <StackPanel Spacing="25">
-      
-      <!-- Title -->
-      <TextBlock Text="⚙️ PARAMÈTRES" 
-                 FontSize="24" 
-                 FontWeight="Bold" 
-                 HorizontalAlignment="Center"
-                 Foreground="#00ffff" 
-                 Margin="0,0,0,10"/>
-      
-      <!-- Dictionary Section -->
-      <Border BorderBrush="#00ffff" BorderThickness="2" Padding="20" CornerRadius="5">
-        <StackPanel Spacing="15">
-          <TextBlock Text="◆ DICTIONNAIRE DE MOTS" 
-                     FontSize="16" 
-                     FontWeight="Bold"
-                     Foreground="#00ffff"/>
-          
-          <TextBlock Text="Importer un fichier texte (.txt) ou CSV (.csv) contenant des mots" 
-                     FontSize="12" 
-                     Foreground="#aaaaaa"
-                     TextWrapping="Wrap"/>
-          
-          <Button x:Name="ImportDictionaryButton"
-                  Content="[ IMPORTER DICTIONNAIRE ]"
-                  Click="ImportDictionaryButton_Click"
-                  Background="#00ff00"
-                  Foreground="#000000"
-                  FontSize="14"
-                  FontWeight="Bold"
-                  Padding="15,10"
-                  BorderBrush="#00ff00"
-                  BorderThickness="2"
-                  HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Center"/>
-          
-          <TextBlock x:Name="DictionaryStatusText"
-                     Text=""
-                     FontSize="11"
-                     Foreground="#ff00ff"
-                     HorizontalAlignment="Center"
-                     IsVisible="False"/>
-        </StackPanel>
-      </Border>
-      
-      <!-- Database Section -->
-      <Border BorderBrush="#00ffff" BorderThickness="2" Padding="20" CornerRadius="5">
-        <StackPanel Spacing="15">
-          <TextBlock Text="◆ BASE DE DONNÉES" 
-                     FontSize="16" 
-                     FontWeight="Bold"
-                     Foreground="#00ffff"/>
-          
-          <StackPanel Orientation="Horizontal" Spacing="10">
-            <TextBlock Text="Mots en base :" 
-                       FontSize="12" 
-                       Foreground="#aaaaaa"
-                       VerticalAlignment="Center"/>
-            <TextBlock x:Name="WordCountText"
-                       Text="0"
-                       FontSize="12"
+  <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Padding="30">
+    <ScrollViewer>
+      <StackPanel Spacing="25">
+        
+        <TextBlock Text="⚙️ PARAMÈTRES" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                   Margin="0,0,0,10"/>
+        
+        <Border BorderBrush="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                BorderThickness="2" Padding="20" CornerRadius="5">
+          <StackPanel Spacing="15">
+            <TextBlock Text="◆ DICTIONNAIRE DE MOTS" 
+                       FontSize="16" 
                        FontWeight="Bold"
-                       Foreground="#00ff00"/>
+                       Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+            
+            <TextBlock Text="Importer un fichier texte (.txt) ou CSV (.csv) contenant des mots" 
+                       FontSize="12" 
+                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                       TextWrapping="Wrap"/>
+            
+            <Button x:Name="ImportDictionaryButton"
+                    Content="[ IMPORTER DICTIONNAIRE ]"
+                    Click="ImportDictionaryButton_Click"
+                    Background="{DynamicResource ButtonBackground}"
+                    Foreground="{DynamicResource ButtonForeground}"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Padding="15,10"
+                    BorderBrush="{DynamicResource ButtonBorderBrush}"
+                    BorderThickness="2"
+                    HorizontalAlignment="Center"
+                    MinWidth="250"/>
+            
+            <TextBlock x:Name="DictionaryStatusText"
+                       Text=""
+                       FontSize="11"
+                       Foreground="{DynamicResource SystemControlHighlightAccentBrush}"
+                       HorizontalAlignment="Center"
+                       IsVisible="False"/>
           </StackPanel>
-          
-          <Button x:Name="ClearDictionaryButton"
-                  Content="[ VIDER DICTIONNAIRE ]"
-                  Click="ClearDictionaryButton_Click"
-                  Background="#ff0000"
-                  Foreground="#ffffff"
-                  FontSize="12"
-                  FontWeight="Bold"
-                  Padding="10,8"
-                  BorderBrush="#ff0000"
-                  BorderThickness="2"
-                  HorizontalAlignment="Left"/>
-        </StackPanel>
-      </Border>
-      
-      <!-- Close Button -->
-      <Button x:Name="CloseButton"
-              Content="[ FERMER ]"
-              Click="CloseButton_Click"
-              Background="#666666"
-              Foreground="#ffffff"
-              FontSize="14"
-              FontWeight="Bold"
-              Padding="20,10"
-              Margin="0,20,0,0"
-              BorderBrush="#666666"
-              BorderThickness="2"
-              HorizontalAlignment="Center"/>
-      
-    </StackPanel>
+        </Border>
+        
+        <Border BorderBrush="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                BorderThickness="2" Padding="20" CornerRadius="5">
+          <StackPanel Spacing="15">
+            <TextBlock Text="◆ BASE DE DONNÉES" 
+                       FontSize="16" 
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+            
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              
+              <TextBlock Grid.Column="0"
+                         Text="Mots en base :" 
+                         FontSize="12" 
+                         Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                         VerticalAlignment="Center"/>
+              <TextBlock Grid.Column="1"
+                         x:Name="WordCountText"
+                         Text="0"
+                         FontSize="12"
+                         FontWeight="Bold"
+                         Foreground="{DynamicResource SystemControlHighlightAccentBrush}"/>
+            </Grid>
+            
+            <Button x:Name="ClearDictionaryButton"
+                    Content="[ VIDER DICTIONNAIRE ]"
+                    Click="ClearDictionaryButton_Click"
+                    Background="#ff0000"
+                    Foreground="#ffffff"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Padding="10,8"
+                    BorderBrush="#ff0000"
+                    BorderThickness="2"
+                    HorizontalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+        
+        <Button x:Name="CloseButton"
+                Content="[ FERMER ]"
+                Click="CloseButton_Click"
+                Background="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                Foreground="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                FontSize="14"
+                FontWeight="Bold"
+                Padding="20,10"
+                Margin="0,20,0,0"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="2"
+                HorizontalAlignment="Center"/>
+        
+      </StackPanel>
+    </ScrollViewer>
   </Border>
 </Window>

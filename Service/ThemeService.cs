@@ -15,6 +15,7 @@ namespace Yprotect.Services
     public static class ThemeService
     {
         private static AppTheme _currentTheme = AppTheme.System;
+        public static event Action? ThemeChanged;
 
         public static void SetTheme(AppTheme theme)
         {
@@ -26,18 +27,23 @@ namespace Yprotect.Services
                 {
                     case AppTheme.System:
                         Application.Current.RequestedThemeVariant = ThemeVariant.Default;
+                        RemoveNeonTheme();
                         break;
                     case AppTheme.Dark:
                         Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
+                        RemoveNeonTheme();
                         break;
                     case AppTheme.Light:
                         Application.Current.RequestedThemeVariant = ThemeVariant.Light;
+                        RemoveNeonTheme();
                         break;
                     case AppTheme.Neon:
                         Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
                         ApplyNeonTheme();
                         break;
                 }
+                
+                ThemeChanged?.Invoke();
             }
         }
 
@@ -67,19 +73,68 @@ namespace Yprotect.Services
             };
         }
 
+        public static bool IsNeonTheme() => _currentTheme == AppTheme.Neon;
+
         private static void ApplyNeonTheme()
         {
-            // Application du thème néon via les ressources
             if (Application.Current?.Resources != null)
             {
                 var resources = Application.Current.Resources;
                 
-                // Couleurs néon
+                // Background colors
                 resources["SystemControlBackgroundChromeMediumLowBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#1a1a2e"));
+                resources["SystemControlBackgroundBaseLowBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#0f0f23"));
+                resources["SystemControlBackgroundAltHighBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#1a1a2e"));
+                
+                // Text colors
                 resources["SystemControlForegroundBaseHighBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#00ffff"));
                 resources["SystemControlForegroundBaseMediumBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#00ffff"));
+                resources["SystemControlForegroundBaseLowBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#00ffff"));
+                
+                // Accent colors
                 resources["SystemControlHighlightAccentBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#ff00ff"));
-                resources["SystemControlBackgroundBaseLowBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#0f0f23"));
+                resources["SystemControlForegroundAccentBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#ff00ff"));
+                
+                // Input controls
+                resources["TextControlBackground"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#0f0f23"));
+                resources["TextControlForeground"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#00ffff"));
+                resources["TextControlBorderBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#00ffff"));
+                
+                // Button colors
+                resources["ButtonBackground"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#00ff00"));
+                resources["ButtonForeground"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#000000"));
+                resources["ButtonBorderBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#00ff00"));
+            }
+        }
+
+        private static void RemoveNeonTheme()
+        {
+            if (Application.Current?.Resources != null)
+            {
+                var resources = Application.Current.Resources;
+                var keysToRemove = new[]
+                {
+                    "SystemControlBackgroundChromeMediumLowBrush",
+                    "SystemControlBackgroundBaseLowBrush",
+                    "SystemControlBackgroundAltHighBrush",
+                    "SystemControlForegroundBaseHighBrush",
+                    "SystemControlForegroundBaseMediumBrush",
+                    "SystemControlForegroundBaseLowBrush",
+                    "SystemControlHighlightAccentBrush",
+                    "SystemControlForegroundAccentBrush",
+                    "TextControlBackground",
+                    "TextControlForeground",
+                    "TextControlBorderBrush",
+                    "ButtonBackground",
+                    "ButtonForeground",
+                    "ButtonBorderBrush"
+                };
+
+                foreach (var key in keysToRemove)
+                {
+                    if (resources.ContainsKey(key))
+                        resources.Remove(key);
+                }
             }
         }
     }
