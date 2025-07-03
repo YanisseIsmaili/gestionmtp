@@ -34,25 +34,25 @@ namespace Yprotect.Views
             {
                 using var context = new YprotectContext();
                 var hashedPassword = HashPassword(password);
-                
+
                 var user = context.Utilisateurs
                     .FirstOrDefault(u => u.Email == email && u.MotDePasse == hashedPassword);
 
                 if (user != null)
                 {
                     Logger.Success($"Connexion réussie pour {user.Email}");
-                    
+
                     var mainWindow = new MainWindow
                     {
                         DataContext = new MainWindowViewModel()
                     };
-                    
+
                     // Définir comme fenêtre principale AVANT de fermer LoginWindow
                     if (Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
                     {
                         desktop.MainWindow = mainWindow;
                     }
-                    
+
                     mainWindow.Show();
                     this.Close();
                 }
@@ -80,6 +80,19 @@ namespace Yprotect.Views
             using var sha256 = SHA256.Create();
             var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(hashedBytes);
+        }
+
+        private void CreateAccountButton_Click(object? sender, RoutedEventArgs e)
+        {
+            var registerWindow = new RegisterWindow();
+
+            if (Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.MainWindow = registerWindow;
+            }
+
+            registerWindow.Show();
+            this.Close();
         }
     }
 }

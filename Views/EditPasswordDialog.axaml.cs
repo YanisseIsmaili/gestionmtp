@@ -1,8 +1,9 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Yprotect.Models;
-
 namespace Yprotect.Views
+
 {
     public partial class EditPasswordDialog : Window
     {

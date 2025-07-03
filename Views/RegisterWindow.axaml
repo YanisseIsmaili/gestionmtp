@@ -1,0 +1,123 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Yprotect.Views.RegisterWindow"
+        Title="Yprotect - Créer un compte"
+        Width="450" Height="600"
+        MinWidth="400" MinHeight="500"
+        WindowStartupLocation="CenterScreen"
+        CanResize="True">
+  
+  <Border Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" Padding="40">
+    <ScrollViewer>
+      <StackPanel Spacing="20" VerticalAlignment="Center">
+        
+        <TextBlock Text="🔐 CRÉER UN COMPTE" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                   Margin="0,0,0,20"/>
+        
+        <StackPanel Spacing="8">
+          <TextBlock Text="NOM :" FontWeight="SemiBold" 
+                     Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                     HorizontalAlignment="Center"/>
+          <TextBox x:Name="NomTextBox"
+                   Watermark="Votre nom"
+                   Padding="12" FontSize="14"
+                   Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderBrush="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderThickness="2" TextAlignment="Center" MinWidth="200"/>
+        </StackPanel>
+        
+        <StackPanel Spacing="8">
+          <TextBlock Text="PRÉNOM :" FontWeight="SemiBold" 
+                     Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                     HorizontalAlignment="Center"/>
+          <TextBox x:Name="PrenomTextBox"
+                   Watermark="Votre prénom"
+                   Padding="12" FontSize="14"
+                   Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderBrush="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderThickness="2" TextAlignment="Center" MinWidth="200"/>
+        </StackPanel>
+        
+        <StackPanel Spacing="8">
+          <TextBlock Text="EMAIL :" FontWeight="SemiBold" 
+                     Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                     HorizontalAlignment="Center"/>
+          <TextBox x:Name="EmailTextBox"
+                   Watermark="votre.email@exemple.com"
+                   Padding="12" FontSize="14"
+                   Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderBrush="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderThickness="2" TextAlignment="Center" MinWidth="200"/>
+        </StackPanel>
+        
+        <StackPanel Spacing="8">
+          <TextBlock Text="MOT DE PASSE :" FontWeight="SemiBold" 
+                     Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                     HorizontalAlignment="Center"/>
+          <TextBox x:Name="PasswordTextBox"
+                   PasswordChar="●"
+                   Watermark="Mot de passe sécurisé"
+                   Padding="12" FontSize="14"
+                   Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderBrush="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderThickness="2" TextAlignment="Center" MinWidth="200"/>
+        </StackPanel>
+        
+        <StackPanel Spacing="8">
+          <TextBlock Text="CONFIRMER MOT DE PASSE :" FontWeight="SemiBold" 
+                     Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                     HorizontalAlignment="Center"/>
+          <TextBox x:Name="ConfirmPasswordTextBox"
+                   PasswordChar="●"
+                   Watermark="Retapez le mot de passe"
+                   Padding="12" FontSize="14"
+                   Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                   Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderBrush="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                   BorderThickness="2" TextAlignment="Center" MinWidth="200"/>
+        </StackPanel>
+        
+        <TextBlock x:Name="ErrorTextBlock"
+                   Text=""
+                   Foreground="{DynamicResource SystemControlHighlightAccentBrush}"
+                   FontSize="12"
+                   HorizontalAlignment="Center"
+                   IsVisible="False"/>
+        
+        <Button x:Name="RegisterButton"
+                Content="[ CRÉER LE COMPTE ]"
+                Click="RegisterButton_Click"
+                Background="{DynamicResource ButtonBackground}"
+                Foreground="{DynamicResource ButtonForeground}"
+                FontSize="16" FontWeight="Bold"
+                Padding="20,12" Margin="0,20,0,0"
+                BorderBrush="{DynamicResource ButtonBorderBrush}"
+                BorderThickness="2"
+                HorizontalAlignment="Center" MinWidth="200"/>
+        
+        <Border Height="2" Background="{DynamicResource SystemControlForegroundBaseHighBrush}" 
+                Margin="0,20" MaxWidth="300"/>
+        
+        <Button x:Name="BackToLoginButton"
+                Content="[ RETOUR CONNEXION ]"
+                Click="BackToLoginButton_Click"
+                Background="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                Foreground="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                FontSize="14" FontWeight="Bold"
+                Padding="15,10"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="2"
+                HorizontalAlignment="Center" MinWidth="180"/>
+        
+      </StackPanel>
+    </ScrollViewer>
+  </Border>
+</Window>
