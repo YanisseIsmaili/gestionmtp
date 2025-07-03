@@ -18,5 +18,7 @@ namespace Yprotect.Model
         public string MotDePasseChiffre { get; set; } = string.Empty;
         
         public DateTime DateCreation { get; set; }
+        
+        public Guid UtilisateurId { get; set; }
     }
 }

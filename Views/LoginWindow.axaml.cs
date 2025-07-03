@@ -8,6 +8,7 @@ using Yprotect.Modeles;
 using Yprotect.Utils;
 using Yprotect.Views;
 using Yprotect.ViewModels;
+using Yprotect.Services;
 using System;
 
 namespace Yprotect.Views
@@ -40,14 +41,21 @@ namespace Yprotect.Views
 
                 if (user != null)
                 {
-                    Logger.Success($"Connexion réussie pour {user.Email}");
+                    // Assigner le rôle si manquant
+                    if (string.IsNullOrEmpty(user.Role))
+                    {
+                        user.Role = user.Email == "admin@yprotect.com" ? "Admin" : "User";
+                    }
+                    
+                    UserSession.SetCurrentUser(user);
+                    
+                    Logger.Success($"Connexion réussie pour {user.Email} (Rôle: {user.Role})");
 
                     var mainWindow = new MainWindow
                     {
                         DataContext = new MainWindowViewModel()
                     };
 
-                    // Définir comme fenêtre principale AVANT de fermer LoginWindow
                     if (Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
                     {
                         desktop.MainWindow = mainWindow;

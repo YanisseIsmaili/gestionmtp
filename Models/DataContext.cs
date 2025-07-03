@@ -11,23 +11,18 @@ using Yprotect.Modeles;
 namespace Yprotect.Modeles
 {
     public class YprotectContext : DbContext
-    {   /// <summary>
-        /// Initializes a new instance of the <see cref="YprotectContext"/> class.
-        /// </summary>
-
+    {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Configure the context to use SQLite with a specific database file
-                optionsBuilder.UseSqlite("Data Source=yprotect.db");
+                var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "yprotect.db");
+                optionsBuilder.UseSqlite($"Data Source={dbPath}");
             }
         }
 
         public DbSet<BDUtilisateur> Utilisateurs { get; set; }
         public DbSet<BDMotDictionnaire> MotsDictionnaire { get; set; }
         public DbSet<BDPassword> Passwords { get; set; }
-
-
     }
 }

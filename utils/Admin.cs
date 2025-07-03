@@ -12,8 +12,18 @@ namespace Yprotect.Utils
         public static void SeedSuperAdmin(YprotectContext context)
         {
             // Vérifier si un admin existe déjà
-            if (context.Utilisateurs.Any(u => u.Email == "admin@yprotect.com"))
+            var existingAdmin = context.Utilisateurs.FirstOrDefault(u => u.Email == "admin@yprotect.com");
+            
+            if (existingAdmin != null)
+            {
+                // Mettre à jour le rôle si nécessaire
+                if (string.IsNullOrEmpty(existingAdmin.Role) || existingAdmin.Role != "Admin")
+                {
+                    existingAdmin.Role = "Admin";
+                    context.SaveChanges();
+                }
                 return;
+            }
 
             string defaultPassword = Messages.Default_Admin_Password;
             
@@ -25,7 +35,8 @@ namespace Yprotect.Utils
                 Email = "admin@yprotect.com",
                 MotDePasse = HashPassword(defaultPassword),
                 Token = "",
-                DateCreation = DateTime.Now
+                DateCreation = DateTime.Now,
+                Role = "Admin"
             };
 
             context.Utilisateurs.Add(superAdmin);

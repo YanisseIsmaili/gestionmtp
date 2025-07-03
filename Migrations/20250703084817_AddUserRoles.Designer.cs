@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yprotect.Modeles;
 
@@ -10,9 +11,11 @@ using Yprotect.Modeles;
 namespace Yprotect.Migrations
 {
     [DbContext(typeof(YprotectContext))]
-    partial class YprotectContextModelSnapshot : ModelSnapshot
+    [Migration("20250703084817_AddUserRoles")]
+    partial class AddUserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
@@ -56,9 +59,6 @@ namespace Yprotect.Migrations
 
                     b.Property<string>("Site")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UtilisateurId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

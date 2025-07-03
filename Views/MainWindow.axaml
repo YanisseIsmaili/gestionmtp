@@ -33,6 +33,16 @@
                 Command="{Binding SettingsCommand}"
                 ToolTip.Tip="Settings"
                 Width="35" Height="35"/>
+        <Button Content="🚪 Déconnexion"
+                Command="{Binding LogoutCommand}"
+                Background="{DynamicResource ButtonBackground}"
+                Foreground="{DynamicResource ButtonForeground}"
+                FontWeight="Bold"
+                Padding="12,6"
+                Margin="8,0,0,0"
+                BorderBrush="{DynamicResource ButtonBorderBrush}"
+                BorderThickness="2"
+                HorizontalAlignment="Right"/>
       </StackPanel>
     </Grid>
 
@@ -46,34 +56,23 @@
     <Border Grid.Row="2"
             BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
             BorderThickness="1" CornerRadius="5" Padding="5">
-      <ListBox ItemsSource="{Binding Passwords}"
-               SelectedItem="{Binding SelectedPassword}"
-               SelectionMode="Single">
+      <ListBox ItemsSource="{Binding Passwords}" SelectedItem="{Binding SelectedPassword}">
         <ListBox.ItemTemplate>
           <DataTemplate>
-            <Grid Margin="5">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-              </Grid.RowDefinitions>
-
-              <TextBlock Grid.Column="0" Grid.Row="0"
-                         Text="{Binding Site}"
-                         FontWeight="Bold"/>
-              <TextBlock Grid.Column="0" Grid.Row="1"
-                         Text="{Binding Username}"
-                         FontSize="12" Opacity="0.7"/>
-              <TextBlock Grid.Column="1" Grid.RowSpan="2"
-                         Text="{Binding MaskedPassword}"
-                         VerticalAlignment="Center"
-                         FontFamily="Consolas"/>
-            </Grid>
+            <StackPanel>
+              <TextBlock Text="{Binding Site}" FontWeight="Bold"/>
+              <TextBlock Text="{Binding Username}"/>
+              <TextBlock Text="{Binding MaskedPassword}"/>
+            </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
+        <ListBox.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="Copier le mot de passe"
+                      Command="{Binding DataContext.CopyPasswordCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                      CommandParameter="{Binding $parent[ListBoxItem].DataContext}"/>
+          </ContextMenu>
+        </ListBox.ContextMenu>
       </ListBox>
     </Border>
 
@@ -92,6 +91,10 @@
       <Button Content="📁 Import CSV" 
               Command="{Binding ImportCsvCommand}"
               MinWidth="100" Padding="10,5"/>
+      <Button Content="🔑 Générer mot de passe"
+              Command="{Binding GeneratePasswordCommand}"
+              Margin="0,0,8,0"
+              Padding="10,6"/>
     </StackPanel>
   </Grid>
 </Window>

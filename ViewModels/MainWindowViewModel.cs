@@ -27,16 +27,19 @@ namespace Yprotect.ViewModels
         {
             _passwords = new ObservableCollection<PasswordEntry>();
             _filteredPasswords = new ObservableCollection<PasswordEntry>();
-            
+
             LoadPasswords();
-            
+
             AddCommand = new RelayCommand(Add);
             EditCommand = new RelayCommand(Edit, () => SelectedPassword != null);
             DeleteCommand = new RelayCommand(Delete, () => SelectedPassword != null);
             ImportCsvCommand = new RelayCommand(ImportCsv);
             CycleThemeCommand = new RelayCommand(CycleTheme);
             SettingsCommand = new RelayCommand(OpenSettings);
-            
+            LogoutCommand = new RelayCommand(Logout);
+            GeneratePasswordCommand = new RelayCommand(ShowGeneratedPassword);
+            CopyPasswordCommand = new RelayCommand<PasswordEntry>(CopyPassword);
+
             UpdateFilteredPasswords();
             _passwords.CollectionChanged += (s, e) => SavePasswords();
         }
@@ -70,12 +73,19 @@ namespace Yprotect.ViewModels
             set => SetProperty(ref _themeButtonText, value);
         }
 
+        public bool IsAdmin => UserSession.IsAdmin;
+        public string UserRoleText => UserSession.IsAdmin ? "👑 Administrateur" : "👤 Utilisateur";
+        public string UserDisplayName => $"{UserSession.CurrentUser?.Prenom} {UserSession.CurrentUser?.Nom}";
+
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand ImportCsvCommand { get; }
         public ICommand CycleThemeCommand { get; }
         public ICommand SettingsCommand { get; }
+        public ICommand LogoutCommand { get; }
+        public ICommand GeneratePasswordCommand { get; }
+        public ICommand CopyPasswordCommand { get; }
 
         private void LoadPasswords()
         {
@@ -83,9 +93,9 @@ namespace Yprotect.ViewModels
             {
                 using var context = new YprotectContext();
                 var dbPasswords = context.Passwords.ToList();
-                
+
                 _passwords.Clear();
-                
+
                 foreach (var dbPassword in dbPasswords)
                 {
                     var entry = new PasswordEntry
@@ -94,7 +104,7 @@ namespace Yprotect.ViewModels
                         Username = dbPassword.NomUtilisateur,
                         Password = dbPassword.MotDePasseChiffre
                     };
-                    
+
                     entry.PropertyChanged += (s, e) => SavePasswords();
                     _passwords.Add(entry);
                 }
@@ -110,9 +120,9 @@ namespace Yprotect.ViewModels
             try
             {
                 using var context = new YprotectContext();
-                
+
                 context.Passwords.RemoveRange(context.Passwords);
-                
+
                 foreach (var password in _passwords)
                 {
                     context.Passwords.Add(new BDPassword
@@ -124,7 +134,7 @@ namespace Yprotect.ViewModels
                         DateCreation = DateTime.Now
                     });
                 }
-                
+
                 context.SaveChanges();
             }
             catch (Exception ex)
@@ -137,7 +147,7 @@ namespace Yprotect.ViewModels
         {
             var filtered = string.IsNullOrWhiteSpace(_searchText)
                 ? _passwords.ToList()
-                : _passwords.Where(p => 
+                : _passwords.Where(p =>
                     p.Site.Contains(_searchText, StringComparison.OrdinalIgnoreCase) ||
                     p.Username.Contains(_searchText, StringComparison.OrdinalIgnoreCase)).ToList();
 
@@ -225,11 +235,120 @@ namespace Yprotect.ViewModels
             }
         }
 
+        private void Logout()
+        {
+            UserSession.Logout();
+
+            var loginWindow = new LoginWindow();
+
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                // Ferme l'ancienne fenêtre après avoir affiché la nouvelle
+                var oldMainWindow = desktop.MainWindow;
+                desktop.MainWindow = loginWindow;
+                loginWindow.Show();
+                oldMainWindow?.Close();
+            }
+            else
+            {
+                loginWindow.Show();
+            }
+        }
+
         private Window GetMainWindow()
         {
             if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 return desktop.MainWindow ?? throw new InvalidOperationException("MainWindow not found");
             throw new InvalidOperationException("Application lifetime not found");
+        }
+
+        // Générateur de mot de passe basé sur le dictionnaire
+        public string GeneratePassword(int wordCount = 3, int minLength = 12)
+        {
+            try
+            {
+                using var context = new YprotectContext();
+                var words = context.MotsDictionnaire.Select(m => m.Mot).ToList();
+
+                if (words.Count == 0)
+                    return "Aucun mot en base";
+
+                var rnd = new Random();
+                string password = "";
+
+                while (password.Length < minLength)
+                {
+                    for (int i = 0; i < wordCount; i++)
+                    {
+                        var word = words[rnd.Next(words.Count)];
+                        password += word;
+                    }
+                    password += rnd.Next(10).ToString();
+                    password += "!@#$%&*"[rnd.Next(7)];
+                }
+
+                if (password.Length > minLength)
+                    password = password.Substring(0, minLength);
+
+                return password;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Erreur génération mot de passe", ex);
+                return "Erreur génération";
+            }
+        }
+
+        // Commande pour afficher le mot de passe généré
+        private async void ShowGeneratedPassword()
+        {
+            var password = GeneratePassword();
+            var dialog = new Window
+            {
+                Title = "Mot de passe généré",
+                Width = 400,
+                Height = 200,
+                Content = new TextBlock
+                {
+                    Text = $"Mot de passe généré :\n{password}\n\n(Copié dans le presse-papier)",
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    TextWrapping = Avalonia.Media.TextWrapping.Wrap
+                },
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            var mainWindow = GetMainWindow();
+            if (mainWindow.Clipboard != null)
+                await mainWindow.Clipboard.SetTextAsync(password);
+
+            await dialog.ShowDialog(mainWindow);
+        }
+
+        // Commande pour copier le mot de passe via le menu contextuel
+        private async void CopyPassword(PasswordEntry? entry)
+        {
+            if (entry == null) return;
+            var mainWindow = GetMainWindow();
+            if (mainWindow.Clipboard != null)
+                await mainWindow.Clipboard.SetTextAsync(entry.Password);
+
+            // Optionnel : notification
+            var dialog = new Window
+            {
+                Title = "Copie",
+                Width = 300,
+                Height = 120,
+                Content = new TextBlock
+                {
+                    Text = "Mot de passe copié dans le presse-papier.",
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    TextWrapping = Avalonia.Media.TextWrapping.Wrap
+                },
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            await dialog.ShowDialog(mainWindow);
         }
     }
 }

@@ -35,15 +35,14 @@ public partial class App : Application
 
            base.OnFrameworkInitializationCompleted();
 
-           // Initialize the SQLite database connection
            Logger.Database("Création de la base de données...");
            
            using (YprotectContext olocalDatabase = new YprotectContext())
            {
-               // Exécuter les migrations automatiquement
                Logger.Database("Application des migrations...");
                olocalDatabase.Database.Migrate();
-
+               
+               // AdminSeeder désactivé temporairement
                AdminSeeder.SeedSuperAdmin(olocalDatabase);
                
                Logger.Success("Base de données et migrations appliquées avec succès");
