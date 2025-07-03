@@ -16,8 +16,6 @@ namespace Yprotect.Services
             try
             {
                 var lines = File.ReadAllLines(filePath);
-                
-                // Skip header if exists
                 var startIndex = HasHeader(lines) ? 1 : 0;
                 
                 for (int i = startIndex; i < lines.Length; i++)
@@ -42,7 +40,9 @@ namespace Yprotect.Services
             if (lines.Length == 0) return false;
             
             var firstLine = lines[0].ToLower();
-            return firstLine.Contains("site") || firstLine.Contains("username") || firstLine.Contains("password");
+            return firstLine.Contains("name") || firstLine.Contains("url") || 
+                   firstLine.Contains("site") || firstLine.Contains("username") || 
+                   firstLine.Contains("password");
         }
         
         private static PasswordEntry? ParseCsvLine(string line)
@@ -51,7 +51,20 @@ namespace Yprotect.Services
             {
                 var parts = SplitCsvLine(line);
                 
-                if (parts.Length >= 3)
+                // Format: name,site,url,username,password,note
+                if (parts.Length >= 6)
+                {
+                    return new PasswordEntry
+                    {
+                        Site = parts[1].Trim(),      // site
+                        Username = parts[0].Trim(),  // name → Username
+                        Email = parts[3].Trim(),     // username → Email
+                        Password = parts[4].Trim(),  // password
+                        Notes = parts[5].Trim()      // note
+                    };
+                }
+                // Fallback format: site,username,password
+                else if (parts.Length >= 3)
                 {
                     return new PasswordEntry
                     {

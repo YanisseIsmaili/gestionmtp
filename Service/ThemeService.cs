@@ -17,6 +17,29 @@ namespace Yprotect.Services
         private static AppTheme _currentTheme = AppTheme.System;
         public static event Action? ThemeChanged;
 
+        static ThemeService()
+        {
+            // Détecter le thème OS au démarrage
+            DetectSystemTheme();
+        }
+
+        private static void DetectSystemTheme()
+        {
+            if (Application.Current != null)
+            {
+                var actualTheme = Application.Current.ActualThemeVariant;
+                
+                if (actualTheme == ThemeVariant.Dark)
+                    _currentTheme = AppTheme.Dark;
+                else if (actualTheme == ThemeVariant.Light)
+                    _currentTheme = AppTheme.Light;
+                else
+                    _currentTheme = AppTheme.System;
+                
+                SetTheme(_currentTheme);
+            }
+        }
+
         public static void SetTheme(AppTheme theme)
         {
             _currentTheme = theme;

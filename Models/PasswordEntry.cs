@@ -8,7 +8,9 @@ namespace Yprotect.Models
     {
         private string _site = "";
         private string _username = "";
+        private string _email = "";
         private string _password = "";
+        private string _notes = "";
 
         public string Site 
         { 
@@ -22,10 +24,22 @@ namespace Yprotect.Models
             set => SetProperty(ref _username, value);
         }
 
+        public string Email 
+        { 
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
         public string Password 
         { 
             get => _password;
             set => SetProperty(ref _password, value);
+        }
+
+        public string Notes 
+        { 
+            get => _notes;
+            set => SetProperty(ref _notes, value);
         }
 
         public string MaskedPassword => new string('●', Math.Min(Password.Length, 12));
