@@ -59,18 +59,27 @@
       <ListBox ItemsSource="{Binding Passwords}" SelectedItem="{Binding SelectedPassword}">
         <ListBox.ItemTemplate>
           <DataTemplate>
-            <StackPanel>
-              <TextBlock Text="{Binding Site}" FontWeight="Bold"/>
-              <TextBlock Text="{Binding Username}"/>
-              <TextBlock Text="{Binding MaskedPassword}"/>
-            </StackPanel>
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="{Binding Site}" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Username}"/>
+                <TextBlock Text="{Binding MaskedPassword}"/>
+              </StackPanel>
+              <Button Grid.Column="1"
+                      Content="Copier"
+                      Command="{Binding DataContext.CopyPasswordCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                      CommandParameter="{Binding .}"
+                      Margin="10,0,0,0"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Right"/>
+            </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
         <ListBox.ContextMenu>
           <ContextMenu>
             <MenuItem Header="Copier le mot de passe"
                       Command="{Binding DataContext.CopyPasswordCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                      CommandParameter="{Binding $parent[ListBoxItem].DataContext}"/>
+                      CommandParameter="{Binding .}"/>
           </ContextMenu>
         </ListBox.ContextMenu>
       </ListBox>

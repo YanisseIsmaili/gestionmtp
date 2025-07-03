@@ -92,7 +92,15 @@ namespace Yprotect.ViewModels
             try
             {
                 using var context = new YprotectContext();
-                var dbPasswords = context.Passwords.ToList();
+
+                // Filtrer par utilisateur connecté
+                var userId = UserSession.CurrentUser?.Id;
+                if (userId == null)
+                    return;
+
+                var dbPasswords = context.Passwords
+                    .Where(p => p.UtilisateurId == userId)
+                    .ToList();
 
                 _passwords.Clear();
 
@@ -328,12 +336,23 @@ namespace Yprotect.ViewModels
         // Commande pour copier le mot de passe via le menu contextuel
         private async void CopyPassword(PasswordEntry? entry)
         {
-            if (entry == null) return;
+            if (entry == null)
+            {
+                Logger.Error("Aucun mot de passe sélectionné pour la copie.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(entry.Password))
+            {
+                Logger.Error("Le champ mot de passe est vide.");
+                return;
+            }
+
+            // Utilise le presse-papier de la fenêtre principale
             var mainWindow = GetMainWindow();
             if (mainWindow.Clipboard != null)
                 await mainWindow.Clipboard.SetTextAsync(entry.Password);
 
-            // Optionnel : notification
             var dialog = new Window
             {
                 Title = "Copie",
